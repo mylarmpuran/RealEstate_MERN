@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const createToken = (userId) => {
+export const createToken = (userId) => {
     return jwt.sign(
         {id:userId},
         process.env.JWT_SECRET,
@@ -11,7 +11,7 @@ const createToken = (userId) => {
 
 
 
-const verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -29,4 +29,3 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-export default {verifyToken, createToken};
