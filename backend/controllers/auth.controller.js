@@ -33,7 +33,10 @@ export const signin = async (req, res, next) => {
     if (!validUser) {
       return next(errorHandler(404, "user not found!"));
     }
-    const validPassword = await bcryptjs.compareSync(password, validUser.password);
+    const validPassword = await bcryptjs.compareSync(
+      password,
+      validUser.password
+    );
     if (!validPassword) {
       return next(errorHandler(401, "wrong credentials"));
     }
@@ -43,13 +46,60 @@ export const signin = async (req, res, next) => {
     const { password: pass, ...rest } = validUser._doc;
     console.log("ima from signin ", rest);
     res
-      .cookie("access_token", token, { 
+      .cookie("access_token", token, {
         httpOnly: true,
         secure: true,
-        sameSite: "none"
-        })
+        sameSite: "none",
+      })
       .status(200)
       .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      const token = createToken(user._id);
+      const { password: pass, ...rest } = user._doc;
+      console.log("ima from signin ", rest);
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+        })
+        .status(200)
+        .json(rest);
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcryptjs.hashSync(generatedPassword, 10);
+      const newUser = new User({
+        username:
+          req.body.name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email: req.body.email,
+        password: hashedPassword,
+        avatar: req.body.photo,
+      });
+      await newUser.save();
+      const token = createToken(user._id);
+      const { password: pass, ...rest } = user._doc;
+      console.log("ima from signin ", rest);
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+        })
+        .status(200)
+        .json(rest);
+    }
   } catch (error) {
     next(error);
   }
