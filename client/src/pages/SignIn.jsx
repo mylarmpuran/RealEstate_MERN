@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {useDispatch } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import { useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 
 
 function SignIn() {
@@ -73,6 +74,7 @@ function SignIn() {
         >
           {loading ? "Loading" : "Sing in"}
         </button>
+        <OAuth/>
         {error && <p className="font-extrabold text-red-700">{error}</p>}
       </form>
       <div className="flex gap-5 mt-5">
