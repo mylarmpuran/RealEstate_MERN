@@ -28,12 +28,15 @@ function SignIn() {
       dispatch(signInStart());
       const res = await fetch("http://localhost:5000/api/auth/signin", {
         method: "POST",
+        credentials:'include',
         headers: {
           "Content-Type": "application/json",
+          
         },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      console.log("ima from sign in", data)
       if (data.success === false) {
         dispatch(signInFailure(data.message))
         return;
