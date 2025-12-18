@@ -63,3 +63,26 @@ export const getListing = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getListings = async (req, res, next) => {
+  try {
+    
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    let offer = req.query.offer;
+
+    if(offer === undefined || offer === 'false'){
+      offer = { $in: [false, true]};
+    }
+
+    let furnished = req.query.furnished;
+
+    if (furnished === undefined || furnished === 'false'){
+      furnished = {$in: [false, true]};
+    }
+
+    
+  } catch (error) {
+    
+  }
+}
