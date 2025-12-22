@@ -1,18 +1,19 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('searchTerm', searchTerm);
     const searchQuery = urlParams.toString();
-    Navigate(`/search?${searchQuery}`)
+    navigate(`/search?${searchQuery}`)
   };
 
   useEffect(() => {
